@@ -1,0 +1,20 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.1
+Created-By: 1.6.0_43-b01 (Sun Microsystems Inc.)
+OpenIDE-Module-Public-Packages: -
+OpenIDE-Module-Module-Dependencies: org.itccanarias.t4.basicmodule > 1
+ .0, org.itccanarias.t4.commons > 1.0, org.openide.awt > 7.23.1, org.o
+ penide.dialogs > 7.15.1, org.openide.nodes > 7.16.1, org.openide.util
+  > 8.6.2, org.openide.util.lookup > 8.3.1, org.openide.windows > 6.33
+ .1
+OpenIDE-Module-Java-Dependencies: Java > 1.6
+OpenIDE-Module-Implementation-Version: 130613
+AutoUpdate-Show-In-Client: true
+OpenIDE-Module: org.itccanarias.t4.thesaurus
+OpenIDE-Module-Layer: org/itccanarias/t4/thesaurus/layer.xml
+OpenIDE-Module-Localizing-Bundle: org/itccanarias/t4/thesaurus/Bundle.
+ properties
+OpenIDE-Module-Specification-Version: 1.0
+OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1
+Class-Path: ext/org.json-chargebee-1.0.jar ext/jackson-core-2.13.5.jar ext/jackson-databind-2.8.2.jar
+

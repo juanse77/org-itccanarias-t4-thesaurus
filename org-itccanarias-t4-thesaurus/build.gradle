@@ -1,0 +1,57 @@
+plugins {
+    id 'java-library'
+}
+
+group = 'org.itccanarias'
+version = '2.0'
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+
+repositories {
+
+    flatDir {
+        dirs 'libs'
+    }
+
+    maven {
+        url "https://netbeans.apidesign.org/maven2/"
+    }
+
+    mavenCentral()
+}
+
+dependencies {
+
+    implementation fileTree('libs')
+
+    // https://mvnrepository.com/artifact/org.netbeans.api/org-openide-filesystems
+    // implementation group: 'org.netbeans.api', name: 'org-openide-filesystems', version: 'RELEASE90'
+
+    // https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api
+    // implementation group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.12'
+
+    // https://mvnrepository.com/artifact/org.netbeans.api/org-openide-dialogs
+    // implementation group: 'org.netbeans.api', name: 'org-openide-dialogs', version: 'RELEASE731'
+
+    // implementation group: 'org.netbeans.modules', name: 'org-netbeans-bootstrap', version: 'RELEASE691'
+
+    // implementation group: 'org.netbeans.modules', name: 'org-netbeans-core-startup', version: 'RELEASE691'
+
+    // https://mvnrepository.com/artifact/org.netbeans.api/org-openide-dialogs
+    // implementation group: 'org.netbeans.api', name: 'org-openide-dialogs', version: 'RELEASE802'
+
+}
+
+jar {
+
+    manifest {
+        from 'src/main/java/resources/META-INF/MANIFEST.MF'
+    }
+    
+    from 'src/main/java/resources'
+}
+
+compileJava {
+    options.compilerArgs << "-Xlint:unchecked"
+}
+
