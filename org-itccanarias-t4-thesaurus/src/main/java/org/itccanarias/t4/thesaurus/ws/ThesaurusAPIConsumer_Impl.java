@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 
 import org.json.JSONObject;
 
@@ -50,18 +51,26 @@ public class ThesaurusAPIConsumer_Impl implements ThesaurusAPIConsumer {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestProperty("Authorization", "Bearer " + token);
+        connection.setDoOutput(true);
+        connection.setRequestMethod("POST");
+        connection.setRequestProperty("Content-Type", "application/json");
 
-        String jsonString = "{\"taxon\": \"" + taxon + "\"}";
+        JSONObject jsonObject = new JSONObject();
 
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        jsonObject.put("taxon", taxon);
 
-        conn.setRequestMethod("POST");
-        conn.setRequestProperty("Accept", "application/json");
+        String jsonString = jsonObject.toString();
+        
+        DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 
-        int responseCode = conn.getResponseCode();
+        wr.writeBytes(jsonString);
+        wr.flush();
+        wr.close();
+        
+        int responseCode = connection.getResponseCode();
 
         if (responseCode == HttpURLConnection.HTTP_CREATED) {
-            String resp = readResponse(conn);
+            String resp = readResponse(connection);
 
             ObjectMapper objectMapper = new ObjectMapper();
             TaxonDS tds = objectMapper.readValue(resp, TaxonDS.class);
@@ -125,7 +134,7 @@ public class ThesaurusAPIConsumer_Impl implements ThesaurusAPIConsumer {
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
         conn.setRequestMethod("GET");
-        conn.setRequestProperty("Accept", "application/json");
+        conn.setRequestProperty("Content-Type", "application/json");
 
         int responseCode = conn.getResponseCode();
 
@@ -180,15 +189,19 @@ public class ThesaurusAPIConsumer_Impl implements ThesaurusAPIConsumer {
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 
         connection.setRequestProperty("Authorization", "Bearer " + token);
-
+        connection.setDoOutput(true);
+        connection.setRequestMethod("PUT");
+        connection.setRequestProperty("Content-Type", "application/json");
+        
         String jsonString = "{\"taxon\": \"" + new_name + "\"}";
 
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
 
-        conn.setRequestMethod("PUT");
-        conn.setRequestProperty("Accept", "application/json");
-
-        int responseCode = conn.getResponseCode();
+        wr.writeBytes(jsonString);
+        wr.flush();
+        wr.close();
+        
+        int responseCode = connection.getResponseCode();
 
         if (responseCode == HttpURLConnection.HTTP_OK) {
             return true;
@@ -203,12 +216,27 @@ public class ThesaurusAPIConsumer_Impl implements ThesaurusAPIConsumer {
             final String endpoint,
             final String[] taxa) throws Exception {
 
-        TaxonValidationResponse tvr_array[] = new TaxonValidationResponse[taxa.length];
+        ArrayList<TaxonValidationResponse> tvr_array_list = new ArrayList<TaxonValidationResponse>();
 
         for (int i = 0; i < taxa.length; i++) {
-            tvr_array[i] = this.validateTaxonName(endpoint, taxa[i]);
+            TaxonValidationResponse tvr = this.validateTaxonName(endpoint, taxa[i]);
+            
+            if(tvr != null){
+                tvr_array_list.add(tvr);
+            } 
+            
         }
 
+        if(tvr_array_list.isEmpty()){
+            return null;
+        }
+        
+        TaxonValidationResponse[] tvr_array = new TaxonValidationResponse[tvr_array_list.size()];
+
+        for (int i = 0; i < tvr_array_list.size(); i++) {
+            tvr_array[i] = tvr_array_list.get(i);
+        }
+        
         return tvr_array;
     }
 

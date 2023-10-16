@@ -51,7 +51,7 @@ public class LoginPanel extends JPanel {
         this.userTextField.setText(NbBundle.getMessage(LoginPanel.class, "LoginPanel.userTextField.text_1"));
         jLabel2.setText(NbBundle.getMessage(LoginPanel.class, "LoginPanel.jLabel2.text_1"));
         this.passField.setText(NbBundle.getMessage(LoginPanel.class, "LoginPanel.passField.text_1"));
-        jLabel3.setIcon(new ImageIcon(this.getClass().getResource("/org/itccanarias/t4/ws/image/logotipoDemiurge.png")));
+        jLabel3.setIcon(new ImageIcon(this.getClass().getResource("/org/itccanarias/t4/thesaurus/image/logotipoDemiurge.png")));
         jLabel3.setText(NbBundle.getMessage(LoginPanel.class, "LoginPanel.jLabel3.text_1"));
         jLabel3.setMaximumSize(new Dimension(131, 205));
         jLabel3.setMinimumSize(new Dimension(131, 205));

@@ -16,5 +16,5 @@ OpenIDE-Module-Localizing-Bundle: org/itccanarias/t4/thesaurus/Bundle.
  properties
 OpenIDE-Module-Specification-Version: 1.0
 OpenIDE-Module-Requires: org.openide.modules.ModuleFormat1
-Class-Path: ext/org.json-chargebee-1.0.jar ext/jackson-core-2.13.5.jar ext/jackson-databind-2.8.2.jar
+Class-Path: ext/org.json-chargebee-1.0.jar ext/jackson-core-2.13.5.jar ext/jackson-databind-2.8.2.jar ext/jackson-annotations-2.13.5.jar
 

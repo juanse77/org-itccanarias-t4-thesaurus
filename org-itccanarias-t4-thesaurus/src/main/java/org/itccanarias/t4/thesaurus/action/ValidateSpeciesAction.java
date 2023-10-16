@@ -26,18 +26,16 @@ import javax.swing.AbstractAction;
 public final class ValidateSpeciesAction extends AbstractAction implements ContextAwareAction, Presenter.Popup, LookupListener {
 
     private Lookup.Result<MatrixData> result;
-    private ThesaurusManager thesaurusManager;
 
     public ValidateSpeciesAction() {
         this(Utilities.actionsGlobalContext());
-        this.thesaurusManager = new ThesaurusManager();
     }
 
     public ValidateSpeciesAction(final Lookup lookup) {
-        super(NbBundle.getMessage((Class) ValidateSpeciesAction.class, "CTL_ValidateSpeciesAction"), new ImageIcon(ImageUtilities.loadImage("org/itccanarias/t4/ui/icons/SpeciesThesaurosValidation.png")));
+        super(NbBundle.getMessage(ValidateSpeciesAction.class, "CTL_ValidateSpeciesAction"), new ImageIcon(ImageUtilities.loadImage("org/itccanarias/t4/ui/icons/SpeciesThesaurosValidation.png")));
         this.result = (Lookup.Result<MatrixData>) lookup.lookupResult(MatrixData.class);
-        this.result.addLookupListener((LookupListener) this);
-        this.resultChanged(new LookupEvent((Lookup.Result) this.result));
+        this.result.addLookupListener(this);
+        this.resultChanged(new LookupEvent(this.result));
     }
 
     public void actionPerformed(final ActionEvent e) {
@@ -46,7 +44,7 @@ public final class ValidateSpeciesAction extends AbstractAction implements Conte
             final TopComponent tc = EditorUtil.findEditor(data);
 
             if (tc == null) {
-                this.thesaurusManager.validateSpecies(data.getFilePath());
+                ThesaurusManager.validateSpecies(data.getFilePath());
             } else {
                 MessageDialog.showInfo("Thesaurus species validation could not be executed while " + data.getFileName() + " matrix is being edited");
             }

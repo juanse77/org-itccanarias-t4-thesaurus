@@ -16,7 +16,7 @@ import org.openide.DialogDisplayer;
 import org.openide.util.HelpCtx;
 import org.openide.DialogDescriptor;
 
-import org.itccanarias.t4.thesaurus.ws.ThesaurusProvider;
+import org.itccanarias.t4.serviceproviders.ThesaurusProvider;
 import org.itccanarias.t4.thesaurus.model.TaxonDS;
 import org.itccanarias.t4.thesaurus.model.TaxonBaseDS;
 import org.itccanarias.t4.thesaurus.ui.LoginPanel;
@@ -86,16 +86,22 @@ public class ThesaurusManager {
                                 ThesaurusManager.password = auth.getPassword();
                             }
 
-                            uploadNewSpecies(auth, valList);
+                            if (!uploadNewSpecies(auth, valList)) {
+                                return null;
+                            }
+
                             break;
                         }
+
                         break;
                     }
                 }
+
                 final Map<String, ThesaurusValidationItem> valMap = new HashMap<String, ThesaurusValidationItem>();
                 for (final ThesaurusValidationItem valSpe : valList) {
                     valMap.put(valSpe.getName(), valSpe);
                 }
+
                 changeTfm4Species(tfm4, valMap);
                 retTfm4 = tfm4;
             }
@@ -131,7 +137,7 @@ public class ThesaurusManager {
                 try {
 
                     final String url = Utils.getThesaurusWebServiceURL();
-                    final String endpoint = "/taxa";
+                    final String endpoint = "/validate_taxon";
 
                     final ThesaurusAPIConsumer_Impl api_consumer = new ThesaurusAPIConsumer_Impl(url);
 
@@ -235,7 +241,7 @@ public class ThesaurusManager {
         }
     }
 
-    private static void uploadNewSpecies(final Auth auth, final List<ThesaurusValidationItem> valList) {
+    private static boolean uploadNewSpecies(final Auth auth, final List<ThesaurusValidationItem> valList) {
 
         final List<TaxonBaseDS> sendList = new ArrayList<TaxonBaseDS>();
 
@@ -255,9 +261,9 @@ public class ThesaurusManager {
 
                         final TaxonBaseDS tb = new TaxonBaseDS();
                         tb.setName(item.getNewName());
-                        
+
                         sendList.add(tb);
-                        
+
                     }
                 }
 
@@ -269,7 +275,7 @@ public class ThesaurusManager {
                         try {
 
                             final String url = Utils.getThesaurusWebServiceURL();
-                            final String endpoint = "/taxa/new";
+                            final String endpoint = "/taxon/new";
 
                             final ThesaurusAPIConsumer_Impl api_consumer = new ThesaurusAPIConsumer_Impl(url);
                             final TaxonDS[] resp = api_consumer.addTaxa(
@@ -279,7 +285,7 @@ public class ThesaurusManager {
                             );
 
                             if (resp != null && resp.length > 0) {
-                                MessageDialog.showInfo("New taxa were uploaded to Thesaurus service");
+                                MessageDialog.showInfo("New taxa were uploaded to Thesaurus service");                                
                             } else {
                                 MessageDialog.showInfo("Thesaurus service didn't returned a valid response");
                             }
@@ -295,12 +301,15 @@ public class ThesaurusManager {
 
             } else {
                 MessageDialog.showError("Authentication error. Check your credentials", new Exception(response_wrapper.message));
+                return false;
             }
 
         } catch (Exception ex) {
             MessageDialog.showError("Authentication error. Check your credentials", ex);
+            return false;
         }
 
+        return true;
     }
 
     private static Auth getLoginData(final LoginPanel loginPanel) {
